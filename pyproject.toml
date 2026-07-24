@@ -1,0 +1,16 @@
+[project]
+name = "qmatrix-grid"
+version = "1.0.0"
+description = "Cost Optimization and Contingency-Aware Resilience in Power Grids via QCi Dirac-3 EQC — QMatrix Phase 3"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "pandapower>=2.14,<3.0",
+    "numpy>=1.26,<2.0",
+    "pandas>=2.0",
+    "matplotlib>=3.8",
+    "networkx>=3.2",
+    "scipy>=1.11",
+    "scikit-learn>=1.3",
+    "python-dotenv>=1.0",
+    "qci-client>=4.0",
+]

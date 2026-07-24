@@ -1,0 +1,41 @@
+# Environment & secrets
+.env
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+build/
+.ipynb_checkpoints/
+
+# Scratch / unused notebooks
+Untitled.ipynb
+
+# Redundant dataset archive
+Challenge_1_Original_Dataset_1_Scenarios.zip
+Original_Dataset_Real-Time_Edition_1/
+
+# Reference documents (not our work)
+Challenge_1_Problem_Formulation (1).pdf
+Data_Description.docx
+QCi_Phase 2 Challenge Description (1).pdf
+
+# Old Phase 1/2 submissions
+QMatrix__Phase1_Version2 (1).pdf
+QMatrix__Phase2_Version0.docx.pdf
+doc/QMatrix__Phase2_Version1.md
+doc/QMatrix__Phase2_Version1.pdf
+doc/microgrid_phase2_guide.pdf
+
+# Intermediate / superseded stats
+doc/stats.json
+doc/stats_phase3.json
+doc/sprint6_contingency_results.json
+
+# Build-only scripts (not needed by judges)
+experiments/build_sprint9_notebook.py
+experiments/execute_notebook.py
+src/build_submission_notebook.py
+src/render_pdf.py
+src/render_phase3_pdf.py
+src/render_guide_pdf.py

@@ -1,0 +1,10 @@
+# Dependencies for QMatrix Phase 3 (qBraid & Local Setup)
+pandapower
+numpy<2.0.0
+pandas
+matplotlib
+networkx
+scipy
+scikit-learn
+python-dotenv
+qci-client

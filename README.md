@@ -2,7 +2,7 @@
 
 **Team QMatrix** | 2026 Global Industry Challenge | QCi Energy Infrastructure Track
 
-[![Launch on qBraid](https://qbraid-static.s3.amazonaws.com/logos/Launch_on_qBraid_white.png)](https://account.qbraid.com/?gitHubUrl=https://github.com/YOUR_USERNAME/YOUR_REPO.git)
+[![Launch on qBraid](https://qbraid-static.s3.amazonaws.com/logos/Launch_on_qBraid_white.png)](https://account.qbraid.com/?gitHubUrl=https://github.com/Temitope15/qmatrix-grid.git)
 
 | Role | Member |
 |---|---|
@@ -82,8 +82,8 @@ We compare all quantum results against a classical LP-based DC-OPF baseline on t
 
 1. Clone the repository and navigate into the project directory:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
-   cd YOUR_REPO
+   git clone https://github.com/Temitope15/qmatrix-grid.git
+   cd qmatrix-grid
    ```
 2. Create and activate a Python virtual environment (Python 3.10 to 3.12 recommended):
    ```bash
