@@ -35,10 +35,24 @@ It has two parts:
 
 All reported values are computed by the submitted code; none are hardcoded.
 
+## Submission package contents
+
+The uploaded `QMatrix_Challenge_Phase3.zip` contains three items:
+
+```
+QMatrix_Challenge_Phase3/
+├── QMatrix__Phase3_Version1.pdf   # Phase 3 write-up (official GIC cover page + 5-page report)
+├── README.md                      # this file
+└── source_code/                   # all code, data and results — run everything from here
+```
+
+Every command and relative path below is written from inside `source_code/`, which is the root of
+the public repository (https://github.com/Temitope15/qmatrix-grid).
+
 ## Repository structure
 
 ```
-.
+source_code/
 ├── models/
 │   ├── grid_graph.py          # Spectral clustering, topology, cost-curve fitting, DER siting
 │   ├── classical_solver.py    # LP DC-OPF, 91-contingency N-1 sweep, multi-island OPF
@@ -48,7 +62,8 @@ All reported values are computed by the submitted code; none are hardcoded.
 │   └── dispatch_benchmark.py  # Full dispatch study -> doc/stats_dispatch.json
 ├── src/extract_stats.py       # PSS/E v33 parser (case.raw / case.rop / case.con)
 ├── doc/
-│   ├── QMatrix__Phase3_Final_Report.md   # Write-up
+│   ├── QMatrix__Phase3_Final_Report.md   # Write-up in Markdown (the PDF at the package root is the official version)
+│   ├── figures/                          # Topology, cost-curve and contingency plots
 │   └── stats_dispatch.json               # Machine-readable results
 ├── Original_Dataset_Offline_Edition_1/Network_03O-10/   # ARPA-E GO dataset
 ├── phase3_final_submission.ipynb         # Main submission notebook
@@ -59,7 +74,11 @@ All reported values are computed by the submitted code; none are hardcoded.
 ## Setup and execution on qBraid (step by step)
 
 1. **Open on qBraid.** On the Aqora challenge page click **Launch on qBraid** (or use the button above,
-   or in qBraid Lab choose *File → New → Clone Repository* and paste the repo URL). The repository opens
+   or in qBraid Lab choose *File → New → Clone Repository* and paste the repo URL). 
+     ```bash
+   git clone https://github.com/Temitope15/qmatrix-grid
+   ```
+   The repository opens
    in qBraid Lab under `~/qmatrix-grid/` (or your chosen name).
 2. **Open a terminal** in qBraid Lab (*File → New → Terminal*) and move into the project:
    ```bash
