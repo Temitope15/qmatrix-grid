@@ -1,184 +1,144 @@
-# QMatrix — Phase 3: Cost Optimization in Resilient Power Grids
+# QMatrix — Cost Optimization in Resilient Power Grids
 
-**Team QMatrix** | 2026 Global Industry Challenge | QCi Energy Infrastructure Track
+**Team QMatrix** · 2026 Global Industry Challenge · QCi Energy Infrastructure Track
+**Project:** Non-convex cubic dispatch and resilience in microgrid networks via QCi Dirac-3
 
 [![Launch on qBraid](https://qbraid-static.s3.amazonaws.com/logos/Launch_on_qBraid_white.png)](https://account.qbraid.com/?gitHubUrl=https://github.com/Temitope15/qmatrix-grid.git)
 
 | Role | Member |
 |---|---|
-| Project Lead & Quantum Strategy Architect | Sharmila L |
+| Project Lead & Quantum Strategy | Sharmila L |
 | Lead Coder | Temitope Akinsunmade |
-| Lead Quantum & Energy Systems Specialist | Abdullahi Tajudeen O. |
-| Lead Data & Simulation Analyst | Joseph Falade |
-| Lead Computational Modeling | Udochukwu Okorie |
+| Quantum & Energy Systems | Abdullahi Tajudeen O. |
+| Data & Simulation Analyst | Joseph Falade |
+| Computational Modeling | Udochukwu Okorie |
 
 ---
 
-## Project Overview
+## Overview
 
-We model the ARPA-E GO Competition Challenge 1 benchmark grid (`Network_03O-10`: 793 buses, 904 branches/transformers, 210 generators, 7,801 MW total load) and solve two coupled optimization problems using QCi's Dirac-3 Entropy Quantum Computer:
+This project optimizes a network of microgrids derived from the ARPA-E GO Challenge 1 grid
+`Network_03O-10` (793 buses, 904 branches/transformers, 82 active generators, 7,801.5 MW load).
+It has two parts:
 
-1. **Islanding QUBO** — which of the 23 PCC tie-lines to open under a transmission blackout, minimizing unserved load across 5 spectral-graph microgrid clusters.
-2. **Dispatch HOBO** — non-convex cubic generator cost minimization across 8 generators (24 qubits), using real cost curves from `case.rop`.
+1. **Non-convex cubic economic dispatch on QCi Dirac-3.** Thermal generation modelled with the
+   cubic cost `C(P)=aP³+bP²+cP+d` is non-convex, so convex LP/QP solvers must relax it. Economic
+   dispatch maps directly onto Dirac-3's continuous encoding: the objective is a degree-3 polynomial
+   and the power-balance constraint `ΣPᵢ=Demand` is the device `sum_constraint`. The dispatch runs on
+   Dirac-3 hardware through `eqc-models` and is compared against a convex QP baseline and a multistart
+   global optimum on the same instance, for two cost models (a dataset-fitted control and a non-convex
+   valve-point model) across ten scenarios.
 
-We compare all quantum results against a classical LP-based DC-OPF baseline on the same problem instances.
+2. **Classical resilience pipeline.** Spectral partitioning into five microgrids (23 PCC tie-lines),
+   an LP DC-OPF sweep over all 91 N-1 contingencies, a transmission-blackout plus secondary-outage
+   study, and contingency-aware DER siting.
 
----
+All reported values are computed by the submitted code; none are hardcoded.
 
-## Clean Repository Structure
+## Repository structure
 
 ```
 .
-├── models/                       # Core optimization modules
-│   ├── __init__.py               # Package marker
-│   ├── grid_graph.py             # Spectral clustering, topology, upgrade siting
-│   ├── hamiltonian_builder.py    # QUBO (islanding) + HOBO (dispatch) construction
-│   ├── classical_solver.py       # LP DC-OPF, N-1 sweep, multi-island OPF
-│   └── qci_adapter.py           # Dirac-3 API client + local simulator fallback
-├── src/
-│   ├── __init__.py               # Package marker
-│   └── extract_stats.py         # PSS/E v33 parser (case.raw, case.rop, case.con)
+├── models/
+│   ├── grid_graph.py          # Spectral clustering, topology, cost-curve fitting, DER siting
+│   ├── classical_solver.py    # LP DC-OPF, 91-contingency N-1 sweep, multi-island OPF
+│   ├── cost_models.py         # Model A (dataset cubic) and Model B (non-convex valve-point cubic)
+│   └── dispatch_dirac3.py     # Dirac-3 dispatch solver (eqc-models) and convex/global baselines
 ├── experiments/
-│   ├── sprint678_complete.py    # End-to-end reproducibility script (Sprints 6, 7, 8)
-│   ├── sprint6_contingency_analysis.py  # Sprint 6 standalone contingency script
-│   └── run_quantum_dirac3.py    # Dirac-3 orchestration module
+│   └── dispatch_benchmark.py  # Full dispatch study -> doc/stats_dispatch.json
+├── src/extract_stats.py       # PSS/E v33 parser (case.raw / case.rop / case.con)
 ├── doc/
-│   ├── QMatrix__Phase3_Final_Report.md   # Written proposal report
-│   ├── stats_phase3_final.json           # Final machine-readable metrics
-│   └── figures/                          # Topology and cost curve plots
-├── Original_Dataset_Offline_Edition_1/   # ARPA-E GO dataset (included)
-│   └── Network_03O-10/
-│       ├── case.rop                      # Generator cost curves
-│       └── scenario_1/
-│           ├── case.raw                  # Bus/branch/generator data
-│           └── case.con                  # 91 contingency definitions
-├── phase3_final_submission.ipynb         # Main executable submission notebook
-├── requirements.txt                      # Dependencies for qBraid & local environments
-├── pyproject.toml                        # Project configuration
-├── .env.example                          # Credential template for QCi API token
-├── .gitignore                            # Clean repository hygiene rules
-└── README.md                             # Project instructions & documentation
+│   ├── QMatrix__Phase3_Final_Report.md   # Write-up
+│   └── stats_dispatch.json               # Machine-readable results
+├── Original_Dataset_Offline_Edition_1/Network_03O-10/   # ARPA-E GO dataset
+├── phase3_final_submission.ipynb         # Main submission notebook
+├── requirements.txt
+└── README.md
 ```
 
----
+## Setup and execution on qBraid (step by step)
 
-## Setup & Execution Instructions
-
-### Option 1: On qBraid
-
-1. Launch this repository on qBraid by clicking the **Launch on qBraid** button above or importing the repository URL.
-2. Open a terminal on qBraid and install the requirements:
+1. **Open on qBraid.** On the Aqora challenge page click **Launch on qBraid** (or use the button above,
+   or in qBraid Lab choose *File → New → Clone Repository* and paste the repo URL). The repository opens
+   in qBraid Lab under `~/qmatrix-grid/` (or your chosen name).
+2. **Open a terminal** in qBraid Lab (*File → New → Terminal*) and move into the project:
    ```bash
+   cd ~/qmatrix-grid           # use the folder name shown in the file browser
    pip install -r requirements.txt
    ```
-3. Set up your QCi credentials by creating `.env` from the provided `.env.example`:
+3. **Add your QCi Dirac-3 token.** QCi finalists receive a token through qBraid; put it in a `.env` file:
    ```bash
    cp .env.example .env
-   # Open .env and insert your QCI_API_TOKEN
+   nano .env                   # set QCI_API_TOKEN=your_token, then save (Ctrl+O, Enter, Ctrl+X)
    ```
-4. Open `phase3_final_submission.ipynb` using Jupyter Notebook or JupyterLab, select Python 3 kernel, and run all cells.
-
-### Option 2: Local Python Environment
-
-1. Clone the repository and navigate into the project directory:
+   `QCI_API_URL` defaults to `https://api.qci-prod.com`. The code maps `QCI_API_TOKEN` to the
+   `QCI_TOKEN` name that `eqc-models` expects, so you only set the one variable.
+4. **Confirm the token works** (optional, no credits used):
    ```bash
-   git clone https://github.com/Temitope15/qmatrix-grid.git
-   cd qmatrix-grid
+   python -c "import os; from dotenv import load_dotenv; from qci_client import QciClient; load_dotenv(); print(QciClient(api_token=os.getenv('QCI_API_TOKEN')).get_allocations())"
    ```
-2. Create and activate a Python virtual environment (Python 3.10 to 3.12 recommended):
-   ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
-   ```
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. Configure API credentials:
-   ```bash
-   cp .env.example .env
-   # Edit .env and set QCI_API_TOKEN=your_qci_api_token
-   ```
-5. Run the submission notebook using Jupyter Notebook:
-   ```bash
-   jupyter notebook phase3_final_submission.ipynb
-   ```
-6. Alternatively, execute the complete pipeline script directly from the terminal:
-   ```bash
-   python experiments/sprint678_complete.py
-   ```
+   You should see a `dirac` allocation with a positive `seconds` balance.
+5. **Run the notebook.** Open `phase3_final_submission.ipynb`, select a **Python 3.10–3.12** kernel, and
+   choose **Run → Run All Cells**. The full run takes ~3–6 minutes: it partitions the grid, sweeps the
+   91 contingencies, submits a **live Dirac-3 dispatch job**, loads the 10-scenario study, and prints a
+   summary. If Cell 1 installs anything, restart the kernel once and Run All again.
 
----
+**Verifying the run.** The notebook prints, live: `23 PCC tie-lines`, `Dirac-3 saves … over the convex
+baseline` (Step 5), the 10-scenario table with `MEAN: Dirac-3 saves 3.00% vs convex QP` (Step 6),
+`Blackout + island N-1 shed: 76.38 MW → 0.00 MW` (Step 7), and a final summary (Step 8).
 
-## Expected Inputs and Outputs
-
-### Inputs
-- `Original_Dataset_Offline_Edition_1/Network_03O-10/scenario_1/case.raw` — 793-bus power system model
-- `Original_Dataset_Offline_Edition_1/Network_03O-10/case.rop` — 210 generator piecewise-linear cost curves
-- `Original_Dataset_Offline_Edition_1/Network_03O-10/scenario_1/case.con` — 91 contingency definitions
-- `QCI_API_TOKEN` environment variable — QCi Dirac-3 API authentication key
-
-### Outputs
-- `doc/stats_phase3_final.json` — Machine-readable summary of all benchmark metrics
-- Notebook cell outputs containing:
-  - 5-cluster partition with per-cluster load/generation breakdown
-  - 91-contingency sweep results (0.00 MW unserved on intact grid)
-  - QCi Dirac-3 QUBO execution results with job IDs and ground state energies
-  - Brute-force ground state comparison ($2^{23} = 8,388,608$ configurations)
-  - Transmission blackout resilience: 76.38 MW shed (unupgraded) vs 0.00 MW shed (with $123.3M DER upgrades)
-  - HOBO dispatch Hamiltonian statistics (152 terms, 24 qubits)
-
----
-
-## Key Results
-
-| Metric | Classical Baseline | QCi Dirac-3 EQC |
-|---|---|---|
-| N-1 Contingencies (intact grid) | 0.00 MW shed (91/91 secure) | — |
-| Blackout + N-1 gen trip (no upgrades) | 76.38 MW (0.98%) shed | 76.38 MW shed |
-| Blackout + N-1 gen trip (with quantum-sited DER) | — | **0.00 MW shed** |
-| DER Upgrade Cost (Cluster 3 only) | — | **$123,308,875** |
-| QUBO Variables | — | 23 (PCC tie-lines) |
-| HOBO Qubits | — | 24 (8 generators × 3 bits) |
-| Brute-force ground state energy | −6,045,330 | — |
-| Dirac-3 QUBO energy | — | −3,138,017 |
-| Brute-force evaluation time | 107 s (8.4M states) | — |
-| Dirac-3 wall-clock time | — | 9.3 s |
-
----
-
-## Quantum Advantage & Limitations
-
-The quantum approach provides a concrete benefit in the **microgrid upgrade siting** pipeline: the Dirac-3 islanding solution identifies which PCC tie-lines to open, and the resulting island topology determines where generation deficits emerge under N-1 conditions. This drives the targeted $123.3M DER investment in Cluster 3 — a decision that classical load flow alone does not surface because it treats the grid as a single connected network.
-
-### Known Limitations & Observations
-1. **Continuous / Integer Outputs**: QCi Dirac-3 is a continuous Hamiltonian sampler, so returned vector values are integer/continuous rather than strictly binary. We threshold the vector outputs to $\{0, 1\}$ for tie-line switching decisions.
-2. **Problem Scale**: At 23 binary variables ($2^{23} \approx 8.4\text{M}$ states), exact brute-force search is feasible and finds a deeper binary energy minimum (−6,045,330 vs −3,138,017). The primary value of quantum optimization lies in scaling to larger networks (>40 tie-lines) where brute-force search becomes intractable.
-3. **DC Linearization**: Power flow calculations use DC linearization (B-theta), which is standard for contingency screening. AC power flow verification was performed on the base case via Pandapower.
-4. **Dirac-3 Hardware Connectivity**: In cases of network API timeouts, the solution seamlessly uses a local eigensolver simulation fallback to ensure pipeline robustness.
-
----
-
-## Reproducing Pipeline Artifacts
-
-To regenerate the metric reports and figures directly from source:
-
+**Regenerate the full 10-scenario study from scratch** (~11 live Dirac-3 jobs, a few minutes):
 ```bash
-# Run the complete Phase 3 pipeline verification
-python experiments/sprint678_complete.py
-
-# Extract raw network statistics and generate topology plots
-python src/extract_stats.py
+python experiments/dispatch_benchmark.py          # writes doc/stats_dispatch.json
+python experiments/dispatch_benchmark.py --quick  # scenario 1 only (fast smoke test)
 ```
 
----
+**Notes.** Dirac-3 is a stochastic sampler, so a single live job varies run-to-run (it consistently
+beats the convex baseline); the headline figures are the 10-scenario means in `doc/stats_dispatch.json`.
+A local run is identical after `python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt`.
+
+## Inputs and outputs
+
+**Inputs:** `Network_03O-10` `case.raw` (bus/branch/generator model), `case.rop` (cost curves),
+`case.con` (91 contingencies); `QCI_API_TOKEN` for Dirac-3.
+
+**Outputs:** `doc/stats_dispatch.json` (dispatch study), and notebook cell outputs covering the
+microgrid partition and DER siting, the N-1 sweep, the live Dirac-3 dispatch versus classical
+baselines, the ten-scenario comparison with plots, the blackout resilience analysis, and the
+Dirac-3 encoding.
+
+## Key results
+
+Non-convex cubic dispatch, mean over ten scenarios (Dirac-3 hardware):
+
+| Metric | Convex QP baseline | Dirac-3 EQC | Global optimum |
+|---|---|---|---|
+| Optimality gap vs global | 5.26 % | 2.10 % | — |
+| Cost saving vs convex QP | — | 3.00 % (range 1.12–4.23 %) | — |
+| Feasibility (10 scenarios) | feasible | 10/10 feasible, 0.0 MW balance error | feasible |
+| Dataset control (near-convex) | optimal | 0.30 % gap | optimal |
+
+Classical resilience pipeline:
+
+| Metric | Value |
+|---|---|
+| N-1 contingencies (intact grid) | 91, 0.00 MW shed |
+| Blackout + N-1 gen trip (no upgrade) | 76.38 MW (0.98 %) shed |
+| Blackout + N-1 gen trip (with DER) | 0.00 MW shed |
+| DER upgrade cost (Cluster 3 only) | $123,308,875 |
+
+## Assumptions and limitations
+
+- On near-convex costs (dataset control) Dirac-3 matches the classical optimum; the advantage appears
+  only when the cost is non-convex.
+- Model B cost coefficients are calibrated from published valve-point benchmarks (Walters & Sheble 1993;
+  Sinha et al. 2003) and applied to the dataset's real generator ranges; non-convexity is verified per unit.
+- Dirac-3 is a stochastic sampler; headline figures are ten-scenario means.
+- Islanding, contingency, and siting use DC power flow; the dispatch is a single-bus economic dispatch
+  per microgrid. Multi-period horizons, battery state-of-charge dynamics, two-stage stochastic recourse,
+  unit commitment, and AC security constraints are scoped as future work (see the report).
 
 ## Dependencies
 
-Listed in `requirements.txt`. Core packages:
-- `pandapower` — power system modeling and power flow verification
-- `scipy` — LP solver (HiGHS) for DC-OPF
-- `networkx` & `scikit-learn` — graph topology and spectral clustering
-- `qci-client` — QCi Dirac-3 EQC API client
-- `python-dotenv` — credential management
-- `numpy`, `pandas`, `matplotlib` — numerics and plotting
+See `requirements.txt`: `eqc-models` and `qci-client` (Dirac-3), `pandapower` and `scipy` (DC-OPF),
+`networkx` and `scikit-learn` (topology and spectral clustering), `numpy`, `matplotlib`, `python-dotenv`.

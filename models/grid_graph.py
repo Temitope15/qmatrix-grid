@@ -23,6 +23,9 @@ from src.extract_stats import parse_raw, parse_rop, parse_con, RawNetwork
 class GridGraphModel:
     """NetworkX Graph representation of power grid topology with microgrid candidate extraction."""
 
+    # Loads at/above this level are treated as aggregated critical infrastructure.
+    CRITICAL_LOAD_THRESHOLD_MW = 25.0
+
     def __init__(self, raw_path: Path, rop_path: Path | None = None, con_path: Path | None = None):
         self.raw_path = raw_path
         self.rop_path = rop_path
@@ -69,8 +72,13 @@ class GridGraphModel:
                 if b_id in self.graph:
                     self.graph.nodes[b_id]["p_load"] += ld["p_mw"]
                     self.graph.nodes[b_id]["q_load"] += ld["q_mvar"]
-                    # Mark loads in certain key areas or > 20MW as critical infrastructure candidates
-                    if ld["p_mw"] >= 25.0 or b_id % 7 == 0:
+                    # Critical-infrastructure proxy: large concentrated loads (>= 25 MW)
+                    # represent aggregated critical facilities (hospitals, water
+                    # treatment, data centers, transit) that must be prioritized for
+                    # restoration. This is a documented modeling assumption (the ARPA-E
+                    # dataset does not tag facility type); the threshold is applied
+                    # uniformly and is the ONLY basis for the critical designation.
+                    if self.graph.nodes[b_id]["p_load"] >= self.CRITICAL_LOAD_THRESHOLD_MW:
                         self.graph.nodes[b_id]["is_critical"] = True
                 self.loads[(b_id, ld["id"])] = ld
 

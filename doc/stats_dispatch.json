@@ -1,0 +1,199 @@
+{
+  "dataset": "ARPA-E GO Challenge 1 (Network_03O-10)",
+  "target_cluster": 0,
+  "target_cluster_buses": 229,
+  "n_dispatch_units": 10,
+  "relaxation_schedule": 3,
+  "num_samples": 20,
+  "experiment_A_dataset_control": {
+    "label": "A_dataset_control",
+    "demand_mw": 1555.29,
+    "convex_qp_cost": 2660.28,
+    "dirac3_cost": 2673.33,
+    "global_cost": 2660.28,
+    "convex_qp_gap_pct": 0.0,
+    "dirac3_gap_pct": 0.49,
+    "dirac3_saving_vs_convex_usd_h": -13.04,
+    "dirac3_saving_vs_convex_pct": -0.49,
+    "dirac3_balance_error_mw": 0.0,
+    "dirac3_feasible": true,
+    "dirac3_runtime_sec": 35.773,
+    "global_runtime_sec": 5.7847,
+    "device_energy": 0.612923
+  },
+  "experiment_A_nonconvex_units": 0,
+  "experiment_B_feasible_band_mw": [
+    179.14,
+    2592.144
+  ],
+  "experiment_B_nonconvex_units": 10,
+  "experiment_B_convexity": [
+    {
+      "bus": 267,
+      "gen_id": "99",
+      "p_min": 0.0,
+      "p_max": 367.5,
+      "marginal_min_at_MW": 128.62,
+      "marginal_min_inside_range": true,
+      "is_nonconvex": true,
+      "marginal_cost_range": [
+        14.375,
+        27.313
+      ],
+      "min_second_derivative": -0.058327
+    },
+    {
+      "bus": 281,
+      "gen_id": "99",
+      "p_min": 0.0,
+      "p_max": 340.0,
+      "marginal_min_at_MW": 119.0,
+      "marginal_min_inside_range": true,
+      "is_nonconvex": true,
+      "marginal_cost_range": [
+        16.603,
+        31.546
+      ],
+      "min_second_derivative": -0.072817
+    },
+    {
+      "bus": 740,
+      "gen_id": "99",
+      "p_min": 0.0,
+      "p_max": 336.25,
+      "marginal_min_at_MW": 117.69,
+      "marginal_min_inside_range": true,
+      "is_nonconvex": true,
+      "marginal_cost_range": [
+        17.651,
+        33.536
+      ],
+      "min_second_derivative": -0.078273
+    },
+    {
+      "bus": 337,
+      "gen_id": "99",
+      "p_min": 0.0,
+      "p_max": 323.75,
+      "marginal_min_at_MW": 113.31,
+      "marginal_min_inside_range": true,
+      "is_nonconvex": true,
+      "marginal_cost_range": [
+        17.411,
+        33.081
+      ],
+      "min_second_derivative": -0.080191
+    },
+    {
+      "bus": 770,
+      "gen_id": "1",
+      "p_min": 99.14,
+      "p_max": 319.415,
+      "marginal_min_at_MW": 176.24,
+      "marginal_min_inside_range": true,
+      "is_nonconvex": true,
+      "marginal_cost_range": [
+        19.048,
+        36.19
+      ],
+      "min_second_derivative": -0.12894
+    },
+    {
+      "bus": 469,
+      "gen_id": "1",
+      "p_min": 1.0,
+      "p_max": 317.5,
+      "marginal_min_at_MW": 111.77,
+      "marginal_min_inside_range": true,
+      "is_nonconvex": true,
+      "marginal_cost_range": [
+        22.18,
+        42.141
+      ],
+      "min_second_derivative": -0.104494
+    },
+    {
+      "bus": 152,
+      "gen_id": "1",
+      "p_min": 79.0,
+      "p_max": 187.491,
+      "marginal_min_at_MW": 116.97,
+      "marginal_min_inside_range": true,
+      "is_nonconvex": true,
+      "marginal_cost_range": [
+        20.986,
+        39.874
+      ],
+      "min_second_derivative": -0.288441
+    },
+    {
+      "bus": 350,
+      "gen_id": "99",
+      "p_min": 0.0,
+      "p_max": 159.31,
+      "marginal_min_at_MW": 55.76,
+      "marginal_min_inside_range": true,
+      "is_nonconvex": true,
+      "marginal_cost_range": [
+        24.846,
+        47.207
+      ],
+      "min_second_derivative": -0.232556
+    },
+    {
+      "bus": 353,
+      "gen_id": "99",
+      "p_min": 0.0,
+      "p_max": 147.834,
+      "marginal_min_at_MW": 51.74,
+      "marginal_min_inside_range": true,
+      "is_nonconvex": true,
+      "marginal_cost_range": [
+        26.185,
+        49.752
+      ],
+      "min_second_derivative": -0.264118
+    },
+    {
+      "bus": 272,
+      "gen_id": "99",
+      "p_min": 0.0,
+      "p_max": 93.094,
+      "marginal_min_at_MW": 32.58,
+      "marginal_min_inside_range": true,
+      "is_nonconvex": true,
+      "marginal_cost_range": [
+        26.61,
+        50.558
+      ],
+      "min_second_derivative": -0.426218
+    }
+  ],
+  "experiment_B_sweep": [
+    {
+      "label": "B_scenario_1",
+      "demand_mw": 1083.29,
+      "convex_qp_cost": 33806.33,
+      "dirac3_cost": 32447.08,
+      "global_cost": 31667.94,
+      "convex_qp_gap_pct": 6.753,
+      "dirac3_gap_pct": 2.46,
+      "dirac3_saving_vs_convex_usd_h": 1359.25,
+      "dirac3_saving_vs_convex_pct": 4.021,
+      "dirac3_balance_error_mw": 0.0,
+      "dirac3_feasible": true,
+      "dirac3_runtime_sec": 25.881,
+      "global_runtime_sec": 2.4691,
+      "device_energy": 16741.375,
+      "scenario": 1
+    }
+  ],
+  "summary": {
+    "dirac3_mean_saving_vs_convex_pct": 4.021,
+    "dirac3_mean_gap_vs_global_pct": 2.46,
+    "convex_qp_mean_gap_vs_global_pct": 6.753,
+    "dirac3_max_balance_error_mw": 0.0,
+    "scenarios_evaluated": 1,
+    "dirac3_all_feasible": true
+  }
+}

@@ -39,3 +39,19 @@ src/build_submission_notebook.py
 src/render_pdf.py
 src/render_phase3_pdf.py
 src/render_guide_pdf.py
+src/render_writeup.py
+QMatrix_QCi_Phase3.zip
+*.zip
+
+# Generated write-up artifacts (rendered from the .md source)
+doc/QMatrix__Phase3_Final_Report.html
+doc/QMatrix__Phase3_Final_Report.pdf
+
+# Challenge brief (provider's document, not our work)
+doc/QCI_Phase_3_Challenge_Description.pdf
+
+# Local editor/agent settings
+.claude/
+
+# Submission packaging helper (build-only)
+make_submission.sh
